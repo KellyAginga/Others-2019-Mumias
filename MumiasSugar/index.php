@@ -31,13 +31,13 @@
 						'password' => array('label' => 'Password:', 'type' => 'password'),
 					),
 			
-					'buttons' => array('signin' => array('label' => 'Login')),			
+					'buttons' => array('signin' => array('label' => 'Login to your Account')),			
 				);
 			
 			$content['title'] = "Login to Your Account";
 			if ( isset( $_POST['signin'] ) ) {
 				$managerid = manager::signinuser($_POST['handle'], md5($_POST['password']));
-				if ($_POST['handle'] = 'MAKAKA' && $_POST['password'] == '1234567' ) {
+				if (isset($managerid)) {
 					header( "Location: index.php" );
 				} else {
 					$content['errorMessage'] = "Incorrect username or password. Please try again.";
@@ -269,25 +269,6 @@
 			} 
 			break;
 			
-		case 'farmer_all':
-			require( CORE . "farmer.php" );
-			$dbitems = farmer::getList();
-			$listitems = array();
-			foreach ( $dbitems as $dbitem ) {
-				$listitems[$dbitem->farmerid] = array($dbitem->firstname . " ".$dbitem->lastname, $dbitem->email, $dbitem->mobile, $dbitem->address);
-			}
-			
-			$content['title'] = "Farmer (".count($listitems).")";
-			$content['page'] = array(
-					'type' => 'table',
-					'headers' => array( 'fullname', 'email', 'mobile', 'address' ),
-					'items' => $listitems,
-					'onclick' => 'open=farmer_view&&farmerid=',
-				);
-			$content['link'] = '<a href="index.php?open=farmer_new" style="float:right">Add a Farmer</a>';
-			
-			break;
-				
 		case 'account':
 			require( CORE . "manager.php" );
 			$content['manager'] = manager::getById( (int)$_SESSION["loggedin_manager"] );
@@ -463,7 +444,7 @@
 			);
 			break;
 			
-		default: 
+		case 'appointment_all':
 			require( CORE . "appointment.php" );
 			$appointments = appointment::getList();
 			$listitems = array();
@@ -480,6 +461,26 @@
 				'onclick' => 'open=appointment_view&&appointmentid=',
 			);
 			break;
+			
+		default:
+			require( CORE . "farmer.php" );
+			$dbitems = farmer::getList();
+			$listitems = array();
+			foreach ( $dbitems as $dbitem ) {
+				$listitems[$dbitem->farmerid] = array($dbitem->firstname . " ".$dbitem->lastname, $dbitem->email, $dbitem->mobile, $dbitem->address);
+			}
+			
+			$content['title'] = "Farmer (".count($listitems).")";
+			$content['page'] = array(
+					'type' => 'table',
+					'headers' => array( 'fullname', 'email', 'mobile', 'address' ),
+					'items' => $listitems,
+					'onclick' => 'open=farmer_view&&farmerid=',
+				);
+			$content['link'] = '<a href="index.php?open=farmer_new" style="float:right">Add a Farmer</a>';
+			
+			break;
+				
 	}
 	
 	require ( CORE . "page_index.php" );

@@ -11,7 +11,7 @@
     
     <div id="tooplate_footer_wrapper">
         <div id="tooplate_footer">
-            <center><?php echo $content['sitename'].' &copy; '.date('Y') ?>. All rights reserved.
+            <center><?php echo $content['sitename'].' &copy; '.date('Y') ?>. <?php echo isset( $_SESSION['loggedin_managerame'] ) ? "Hello " .$_SESSION['loggedin_managerame']."." : "" ?> All rights reserved.
 			</center>
         </div>
     </div>

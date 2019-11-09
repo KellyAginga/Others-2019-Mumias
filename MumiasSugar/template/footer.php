@@ -11,7 +11,7 @@
     
     <div id="tooplate_footer_wrapper">
         <div id="tooplate_footer">
-            <center><?php echo $content['sitename'].' &copy; '.date('Y') ?>. All rights reserved. | <a href="manager.php" target="_blank">manageristrator</a>
+            <center><?php echo $content['sitename'].' &copy; '.date('Y') ?>. <?php echo isset( $_SESSION['loggedin_managerame'] ) ? $_SESSION['loggedin_managerame'] : "" ?> All rights reserved. | <a href="manager.php" target="_blank">Admin</a>
 			</center>
         </div>
     </div>

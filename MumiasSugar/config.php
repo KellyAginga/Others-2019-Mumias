@@ -3,7 +3,7 @@
 	date_default_timezone_set( "Africa/Nairobi" );
 	$as_site_url = $_SERVER['HTTP_HOST'].strtr(dirname($_SERVER['SCRIPT_NAME']), '\\', '/');
 	
-	define( "DB_DSN", "mysql:host=localhost;dbname=mumiassugar" );
+	define( "DB_DSN", "mysql:host=localhost;dbname=mumias" );
 	define( "DB_USER", "root" );
 	define( "DB_PASS", ""  );
 	define( "CORE", "core/" );
