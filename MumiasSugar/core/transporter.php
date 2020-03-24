@@ -55,8 +55,8 @@
 			
 			if ($free) $sql = "SELECT * FROM transporters ORDER BY transporterid DESC";
 			else $sql = 'SELECT * FROM transporters 
-			INNER JOIN transporters ON transporters.transporterid = appointments.transporterid 
-			WHERE appointments.transporterid=0 ORDER BY transporterid DESC';
+			INNER JOIN transporters ON transporters.transporterid = payments.transporterid 
+			WHERE payments.transporterid=0 ORDER BY transporterid DESC';
 			
 			$st = $conn->prepare( $sql );
 			$st->execute();

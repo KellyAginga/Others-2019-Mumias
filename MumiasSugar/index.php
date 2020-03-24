@@ -331,7 +331,7 @@
 			} 
 			break;
 		 
-		case 'appointment_new':
+		case 'payment_new':
 			require( CORE . "farmer.php" );			
 			$farmers = farmer::getList();
 			$farmerlist = array();
@@ -346,7 +346,7 @@
 					'type' => 'form',
 					'action' => 'index.php?open='.$open,
 					'fields' => array(
-						'booked' => array('label' => 'Appointment Date:', 'type' => 'text', 'tags' => 'required ', 'value' =>date('Y-m-d')),
+						'booked' => array('label' => 'payment Date:', 'type' => 'text', 'tags' => 'required ', 'value' =>date('Y-m-d')),
 						'weight' => array('label' => 'Est. Weight:', 'type' => 'text', 'tags' => 'required '),
 						'address' => array('label' => 'Farm Location:', 'type' => 'text', 'tags' => 'required '),
 						'farmerid' => array('label' => 'Select farmer:', 'type' => 'select', 'options' => $farmerlist, 'value' => 1),
@@ -355,29 +355,29 @@
 					
 					'hidden' => array('manager' => 1),		
 					'buttons' => array(
-						'appointmentnew' => array('label' => 'Finish this Appointment'),
+						'paymentnew' => array('label' => 'Finish this payment'),
 					),
 				);
 			
-			$content['title'] = "Add a Appointment";
+			$content['title'] = "Add a payment";
 			
-			if ( isset( $_POST['appointmentnew'] ) ) {
-				require( CORE . "appointment.php" );
-				$appointment = new appointment;
-				$appointment->storeFormValues( $_POST );
-				$appointmentid = $appointment->insert();
-				if ($appointmentid) {
-					header( "Location: index.php?open=appointments_all" );
+			if ( isset( $_POST['paymentnew'] ) ) {
+				require( CORE . "payment.php" );
+				$payment = new payment;
+				$payment->storeFormValues( $_POST );
+				$paymentid = $payment->insert();
+				if ($paymentid) {
+					header( "Location: index.php?open=payments_all" );
 				} else {
-					$content['errorMessage'] = "Unable to add a appointment at the moment. Please try again later.";
+					$content['errorMessage'] = "Unable to add a payment at the moment. Please try again later.";
 				}
 			}
 			break;
 		 
-		case 'appointment_view':
-			require( CORE . "appointment.php" );
-			$appointmentid = $_GET["appointmentid"];
-			$appointment = appointment::getById( (int)$appointmentid );
+		case 'payment_view':
+			require( CORE . "payment.php" );
+			$paymentid = $_GET["paymentid"];
+			$payment = payment::getById( (int)$paymentid );
 			
 			require( CORE . "farmer.php" );				
 			$farmers = farmer::getList(false);
@@ -392,73 +392,73 @@
 			
 			$content['page'] = array(
 					'type' => 'form',
-					'action' => 'index.php?open='.$open.'&&appointmentid='.$appointmentid,
+					'action' => 'index.php?open='.$open.'&&paymentid='.$paymentid,
 					'fields' => array(
-						'booked' => array('label' => 'Appointment Date:', 'type' => 'text', 'tags' => 'required ', 'value' => $appointment->booked),
-						'weight' => array('label' => 'Est. Weight:', 'type' => 'text', 'tags' => 'required ', 'value' => $appointment->weight),
-						'address' => array('label' => 'Farm Location:', 'type' => 'text', 'tags' => 'required ', 'value' => $appointment->address),
-						'farmerid' => array('label' => 'Select farmer:', 'type' => 'select', 'options' => $farmerlist, 'value' => $appointment->farmerid),
-						'transporterid' => array('label' => 'Select Transporter:', 'type' => 'select', 'options' => $transporterlist, 'value' => $appointment->transporterid),
+						'booked' => array('label' => 'payment Date:', 'type' => 'text', 'tags' => 'required ', 'value' => $payment->booked),
+						'weight' => array('label' => 'Est. Weight:', 'type' => 'text', 'tags' => 'required ', 'value' => $payment->weight),
+						'address' => array('label' => 'Farm Location:', 'type' => 'text', 'tags' => 'required ', 'value' => $payment->address),
+						'farmerid' => array('label' => 'Select farmer:', 'type' => 'select', 'options' => $farmerlist, 'value' => $payment->farmerid),
+						'transporterid' => array('label' => 'Select Transporter:', 'type' => 'select', 'options' => $transporterlist, 'value' => $payment->transporterid),
 					),
 					
 					'hidden' => array('manager' => 1),		
 					'buttons' => array(
-						'updateAppointment' => array('label' => 'Update this Appointment'),
-						'cancelAppointment' => array('label' => 'Cancel this Appointment'),
-						'deleteAppointment' => array('label' => 'Delete this Appointment'),
+						'updatepayment' => array('label' => 'Update this payment'),
+						'cancelpayment' => array('label' => 'Cancel this payment'),
+						'deletepayment' => array('label' => 'Delete this payment'),
 					),
 				);
 			
-			$content['title'] = "Manage Appointment";
+			$content['title'] = "Manage payment";
 			
-			if ( isset( $_POST['updateAppointment'] ) ) {
-				$appointment->storeFormValues( $_POST );
-				$appointment->update();
-				header( "Location: index.php?open=appointment_view&&appointmentid=".$appointmentid."&&status=changesSaved" );
-			} elseif ( isset( $_POST['cancelAppointment'] ) ) {
-				$appointment->cancel();
+			if ( isset( $_POST['updatepayment'] ) ) {
+				$payment->storeFormValues( $_POST );
+				$payment->update();
+				header( "Location: index.php?open=payment_view&&paymentid=".$paymentid."&&status=changesSaved" );
+			} elseif ( isset( $_POST['cancelpayment'] ) ) {
+				$payment->cancel();
 				header( "Location: index.php" );
-			} elseif ( isset( $_POST['deleteAppointment'] ) ) {
-				$appointment->delete();
+			} elseif ( isset( $_POST['deletepayment'] ) ) {
+				$payment->delete();
 				header( "Location: index.php" );
 			} elseif ( isset( $_POST['cancel'] ) ) {
 				header( "Location: index.php" );
 			} 
 			break;
 		
-		case 'appointment_cancel':
-			require( CORE . "appointment.php" );
-			$appointments = appointment::getCancelled();
+		case 'payment_cancel':
+			require( CORE . "payment.php" );
+			$payments = payment::getCancelled();
 			$listitems = array();
-			foreach ( $appointments as $appointment ) {
-				$listitems[$appointment->appointmentid] = array($appointment->booked, $appointment->farmerid, 'Cancelled');
+			foreach ( $payments as $payment ) {
+				$listitems[$payment->paymentid] = array($payment->booked, $payment->farmerid, 'Cancelled');
 			}
 			
-			$content['title'] = 'Cancelled Appointments | <a href="index.php">Active Appointments</a>';
-			$content['link'] = '<a href="index.php?open=appointment_new" style="float:right">New Appointment</a>';
+			$content['title'] = 'Cancelled payments | <a href="index.php">Active payments</a>';
+			$content['link'] = '<a href="index.php?open=payment_new" style="float:right">New payment</a>';
 			$content['page'] = array(
 				'type' => 'table',
 				'headers' => array( 'booked', 'weight', 'address', 'farmerid', 'transporterid' ), 
 				'items' => $listitems,
-				'onclick' => 'open=appointment_view&&appointmentid=',
+				'onclick' => 'open=payment_view&&paymentid=',
 			);
 			break;
 			
-		case 'appointment_all':
-			require( CORE . "appointment.php" );
-			$appointments = appointment::getList();
+		case 'payment_all':
+			require( CORE . "payment.php" );
+			$payments = payment::getList();
 			$listitems = array();
-			foreach ( $appointments as $appointment ) {
-				$listitems[$appointment->appointmentid] = array($appointment->booked, $appointment->weight, $appointment->address, $appointment->farmerid, $appointment->transporterid . '/=');
+			foreach ( $payments as $payment ) {
+				$listitems[$payment->paymentid] = array($payment->booked, $payment->weight, $payment->address, $payment->farmerid, $payment->transporterid . '/=');
 			}
 			
-			$content['title'] = 'All Appointments | <a href="index.php?open=appointment_cancel">Cancelled</a>';
-			$content['link'] = '<a href="index.php?open=appointment_new" style="float:right">New Appointment</a>';
+			$content['title'] = 'All payments | <a href="index.php?open=payment_cancel">Cancelled</a>';
+			$content['link'] = '<a href="index.php?open=payment_new" style="float:right">New payment</a>';
 			$content['page'] = array(
 				'type' => 'table',
 				'headers' => array( 'booked', 'weight', 'address', 'farmerid', 'transporterid' ), 
 				'items' => $listitems,
-				'onclick' => 'open=appointment_view&&appointmentid=',
+				'onclick' => 'open=payment_view&&paymentid=',
 			);
 			break;
 			
@@ -483,4 +483,4 @@
 				
 	}
 	
-	require ( CORE . "page_index.php" );
+	require ( CORE . "page.php" );

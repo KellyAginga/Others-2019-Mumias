@@ -22,34 +22,15 @@
 	
 	function createTables()
 	{
-		tableCreate( 'transporters',  
-			array(//name, mobile, email, address, rate, created, updated
-				'transporterid int(11) NOT NULL AUTO_INCREMENT',
-				'name varchar(100) NOT NULL',
-				'mobile int(11) DEFAULT 0',
-				'email varchar(100) NOT NULL',
-				'address varchar(100) NOT NULL',
-				'rate varchar(100) NOT NULL',
+		tableCreate( 'payments',  
+			array(//famerid, amount, title, created, updated
+				'paymentid int(11) NOT NULL AUTO_INCREMENT',
+				'famerid int(11) DEFAULT 0',
+				'amount int(11) DEFAULT 0',
+				'title varchar(100) NOT NULL',
 				'created datetime DEFAULT NULL',
 				'updated datetime DEFAULT NULL',
-				'PRIMARY KEY (transporterid)',
-				'UNIQUE row1(name)',
-				'UNIQUE row2(mobile)',
-				'UNIQUE row3(email)',
-			)
-		);
-		
-		tableCreate( 'appointments',  
-			array(//booked, weight, address, farmerid, transporterid, created, updated
-				'appointmentid int(11) NOT NULL AUTO_INCREMENT',
-				'booked varchar(50) NOT NULL',
-				'weight varchar(100) NOT NULL',
-				'address varchar(100) NOT NULL',
-				'farmerid int(11) DEFAULT 0',
-				'transporterid int(11) DEFAULT 0',
-				'created datetime DEFAULT NULL',
-				'updated datetime DEFAULT NULL',
-				'PRIMARY KEY (appointmentid)',
+				'PRIMARY KEY (paymentid)',
 			)
 		); 
 		

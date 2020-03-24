@@ -2,12 +2,15 @@
 
 	function as_navigation($request, $html = '')
 	{
-		$userid = isset( $_SESSION['loggedin_user'] ) ? $_SESSION['loggedin_user'] : "";
+		$managerid = isset( $_SESSION['loggedin_manager'] ) ? $_SESSION['loggedin_manager'] : "";
 		$level = isset( $_SESSION['loggedin_level'] ) ? $_SESSION['loggedin_level'] : "";
 		$navigation = array();
-		if ( $userid ) {			
-			$navigation['appointments'] = array('label' => 'Appointments', 'url' => 'index.php?open=appointment_all');
-			$navigation['results'] = array('label' => 'Results', 'url' => 'index.php?open=result_all');
+		if ( $managerid ) {			
+			$navigation['farmers'] = array('label' => 'Farmers', 'url' => 'index.php?open=farmer_all');
+			//$navigation['payments'] = array('label' => 'payments', 'url' => 'index.php?open=payment_all');
+			$navigation['payments'] = array('label' => 'Payments', 'url' => 'index.php?open=payment_all');
+			$navigation['managers'] = array('label' => 'Managers', 'url' => 'index.php?open=manager_all');
+			$navigation['settings'] = array('label' => 'Settings', 'url' => 'index.php?open=settings');			
 			$navigation['signout'] = array('label' => 'Sign Out?', 'url' => 'index.php?open=signout');
 		} else {
 			$navigation['signin'] = array('label' => 'Sign In', 'url' => 'index.php?open=signin');
@@ -24,7 +27,7 @@
 		return $html;
 	}
 	 
-	include TEMPLATE . "header.php";
+	include TEMPLATE . "header1.php";
 	$page = $content['page'];
 ?>
 <div id="tooplate_content">   	
@@ -52,7 +55,8 @@
 							if (isset($field['options'])) { ?>
 						<select class="input_field" name="<?php echo $name  ?>" >
 							<?php foreach ($field['options'] as $key => $value ) { ?>
-					<option value="<?php echo $key ?>"><?php echo $value ?></option>
+					<option value="<?php echo $key ?>"<?php echo ($field['value'] == $key ? ' selected' : '') ?>><?php echo $value ?></option>
+					
 				<?php } ?>
 				</select>
 		<?php }
@@ -99,34 +103,25 @@
 					</tbody>
 				</table>			
 		<?php break;
-			case 'examine': ?>
-				<hr>
-		<div id="general_form"> 
-				<form action="<?php echo $page['action']?>" method="post">  
-				<?php 
-				if (isset($page['quiz'])) { ?>
-					<h3><?php echo $page['quiz'] ?></h3>					
-		<?php }
-				if (isset($page['answers'])) {
-					$i = 1;
-					foreach($page['answers'] as $answer) { ?>
-					<p style="font-size: 18px;width:100%;"><label><input name="set_answer" type="radio" value="<?php echo $i ?>" required ><?php echo $answer ?></label></p>
-			<?php  		$i++;
-					}
-				} ?>
-				<?php 
-				if (isset($page['hidden']))
-					foreach ($page['hidden'] as $name => $hidden)
-						echo '<input type="hidden" name="'.$name.'" value="'.$hidden.'" />';
-							?>	
-						<?php 
-					foreach ($page['buttons'] as $name => $button)
-						echo '<input type="submit" name="'.$name.'" value="'.$button['label'].'" class="submit_btn float_l"'.@$button['tags'].'/>'; ?>
-			
-					</form>
-				</div>
-			<?php				
-			  break;
+			case 'search': ?>
+            <div id="search_box">
+                <form action="index.php" method="post">
+                    <input type="text" value="Enter keyword here..." name="searchText" size="10" id="searchfield" title="searchfield" onfocus="clearText(this)" onblur="clearText(this)" />
+                    <input type="submit" name="searchNow" value="" id="searchbutton" title="Search" />
+                </form>
+            </div>
+            <div class="cleaner"></div><br>
+			<div class="col_large">
+			<?php foreach($page['items'] as $item) { ?>
+				<div title="<?php echo $item[6] ?>"><a href="index.php?open=job_view&&jobid=<?php echo $item[0] ?>"><h3><?php echo $item[1] ?></h3></a>
+				<p>
+					<b>Expected Salary:</b> <?php echo $item[2] ?>; <b>Company</b> <?php echo $item[3] ?>;<br>
+					<b>Requirements:</b> <?php echo $item[4] ?>;<br><b>Skills: </b><?php echo $item[5] ?> ...
+				</p></div>
+			<?php } ?>
+			</div>
+            <div class="cleaner"></div>
+		<?php break;
 			case 'viewer': ?>
 				<?php 
 				if (isset($page['items'])) {
@@ -218,4 +213,4 @@
 		
 		<?php } ?>
 	</div>
-<?php include TEMPLATE . "footer.php" ?>
+<?php include TEMPLATE . "footer1.php" ?>
